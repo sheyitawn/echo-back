@@ -10,12 +10,32 @@ const port = process.env.PORT || 3001;
 
 const submissionsRoute = require('./routes/submission.js');
 
+const allowedOrigins = [
+  'http://localhost:3000', // Development URL
+  'https://www.uwecho.site', // Production URL
+  'http://www.uwecho.site',
+  'www.uwecho.site',
+  'uwecho.site',
+];
+
 const corsOptions = {
-    origin: 'http://localhost:3000', // client-side URL
-    credentials: true, // for cookies, authorization headers with HTTPS 
-  };
-  
-  app.use(cors(corsOptions));
+  origin: function (origin, callback) {
+    // Allow requests with no origin, like mobile apps or curl requests
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      // Origin is allowed
+      callback(null, true);
+    } else {
+      // Origin is not allowed
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // for cookies, authorization headers with HTTPS
+};
+
+app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 app.use(express.json());
 
