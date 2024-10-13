@@ -8,6 +8,10 @@ const SubmissionSchema = new mongoose.Schema({
     timestamp: {
         type: Number,
         required: true
+    },
+    votes: {
+        type: Number,
+        default: 0
     }
 });
 

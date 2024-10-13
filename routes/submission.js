@@ -32,4 +32,28 @@ router.post('/', async (req, res) => {
     }
 });
 
+// PUT request to upvote a submission
+router.put('/:id/upvote', async (req, res) => {
+    try {
+        const submission = await Submission.findById(req.params.id);
+        submission.votes += 1; // Increment votes
+        const updatedSubmission = await submission.save();
+        res.json(updatedSubmission);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+router.put('/:id/downvote', async (req, res) => {
+    try {
+        const submission = await Submission.findById(req.params.id);
+        submission.votes -= 1; // Decrement votes
+        const updatedSubmission = await submission.save();
+        res.json(updatedSubmission);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+
 module.exports = router;
